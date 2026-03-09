@@ -1,8 +1,7 @@
 # 🌶️ StreetByte
 
-<div align="center">
-  <img src="static/img/logo.png" alt="StreetByte Home Page Preview" width="800"/>
-</div>
+<img width="1846" height="967" alt="image" src="https://github.com/user-attachments/assets/0bba009a-7fc9-4962-9999-0a240d42c058" />
+
 
 Welcome to **StreetByte**, your ultimate AI-powered companion for discovering the most mouth-watering street food spots around the city! This web application combines data analytics, machine learning, and natural language processing to serve you the best food recommendations tailored to your city and budget.
 
