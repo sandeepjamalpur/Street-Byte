@@ -1,0 +1,155 @@
+{% extends "base.html" %}
+{% set active_page = "results" %}
+
+{% block title %}Results - {{ city }}{% endblock %}
+{% block meta_desc %}Top street food in {{ city }} under Rs {{ budget }} - AI recommendations by StreetByte.{% endblock %}
+
+{% block content %}
+
+<section class="results-page" aria-label="Search results">
+  <div class="container">
+
+    <!-- Page Header -->
+    <div class="results-page-header reveal">
+      <a href="/" class="back-link" aria-label="Back to home">&larr; Back to Search</a>
+      <h1 class="results-title">
+        Top Street Food in <span class="accent">{{ city }}</span>
+      </h1>
+      <p class="results-subtitle">
+        Found <strong>{{ total }}</strong> recommendations under <strong>Rs {{ budget }}</strong>
+        sorted by AI score &mdash; Page <strong>{{ page }}</strong> of <strong>{{ total_pages }}</strong>
+      </p>
+
+      <!-- Inline re-search form -->
+      <form action="/results" method="GET" class="inline-search">
+        <div class="inline-search-inner glass-card">
+          <div class="inline-field">
+            <label for="city-select-r">City</label>
+            <div class="select-wrapper">
+              <select id="city-select-r" name="city" required>
+                {% for c in cities %}
+                  <option value="{{ c }}" {% if c == city %}selected{% endif %}>{{ c }}</option>
+                {% endfor %}
+              </select>
+              <span class="select-arrow" aria-hidden="true">&#9660;</span>
+            </div>
+          </div>
+          <div class="inline-field">
+            <label for="budget-slider-r">
+              Budget &nbsp;<span id="budget-display-r">Rs {{ budget }}</span>
+            </label>
+            <input type="range" id="budget-slider-r" name="budget"
+                   min="20" max="500" value="{{ budget }}" step="10"
+                   aria-label="Budget" />
+          </div>
+          <button type="submit" class="btn-search-sm">Search Again</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Results Grid -->
+    {% if results %}
+    <div class="results-grid" id="results-grid">
+      {% for item in results %}
+      <article class="food-card reveal" style="animation-delay: {{ loop.index0 * 0.07 }}s; transition-delay: {{ loop.index0 * 0.07 }}s"
+               aria-label="{{ item.food_item }} by {{ item.vendor_name }}">
+        <div class="card-header">
+          <div class="card-top-row">
+            <span class="card-category">{{ item.category }}</span>
+            <span class="sentiment-badge {{ item.sentiment_css }}">{{ item.sentiment_label }}</span>
+          </div>
+          <div class="card-food-name">{{ item.food_item }}</div>
+          <div class="card-vendor">Vendor: <strong>{{ item.vendor_name }}</strong></div>
+        </div>
+
+        <div class="card-body">
+          <!-- Rating row with stars -->
+          <div class="card-rating-row">
+            <span class="card-rating-val">{{ item.rating }}/5</span>
+            <div class="stars" aria-label="{{ item.rating }} out of 5 stars">
+              {% for s in range(1, 6) %}
+                <span class="star {% if s <= item.rating|int %}lit{% endif %}">&#9733;</span>
+              {% endfor %}
+            </div>
+            &nbsp;&bull;&nbsp; {{ item.num_reviews_fmt }} reviews
+          </div>
+
+          <!-- AI Score -->
+          <div>
+            <div class="card-score-row">
+              <span class="ai-score-label">AI Score</span>
+              <span class="ai-score-value">{{ item.composite_score }}</span>
+            </div>
+            <div class="score-bar-mini" style="margin-top:8px">
+              <div class="score-bar-fill" data-width="{{ item.composite_score }}" style="width:0"></div>
+            </div>
+          </div>
+
+          {% if item.review_snippet %}
+          <div class="card-review">{{ item.review_snippet }}</div>
+          {% endif %}
+        </div>
+
+        <div class="card-footer">
+          <div class="card-price">Rs {{ item.price }}</div>
+          <div class="card-city">{{ item.city }}</div>
+          <div class="card-rank">Rank {{ item.rank }}</div>
+        </div>
+      </article>
+      {% endfor %}
+    </div>
+
+    <!-- Pagination -->
+    {% if total_pages > 1 %}
+    <nav class="pagination-bar" aria-label="Results pages">
+      {% if page > 1 %}
+        <a href="/results?city={{ city }}&budget={{ budget }}&page={{ page - 1 }}"
+           class="page-btn" aria-label="Previous page">&larr; Previous</a>
+      {% else %}
+        <button class="page-btn" disabled aria-disabled="true">&larr; Previous</button>
+      {% endif %}
+
+      <div class="page-numbers" role="list">
+        {% for p in range(1, total_pages + 1) %}
+          <a href="/results?city={{ city }}&budget={{ budget }}&page={{ p }}"
+             class="page-num {% if p == page %}active{% endif %}"
+             aria-label="Page {{ p }}" aria-current="{% if p == page %}page{% endif %}">{{ p }}</a>
+        {% endfor %}
+      </div>
+
+      {% if page < total_pages %}
+        <a href="/results?city={{ city }}&budget={{ budget }}&page={{ page + 1 }}"
+           class="page-btn" aria-label="Next page">Next &rarr;</a>
+      {% else %}
+        <button class="page-btn" disabled aria-disabled="true">Next &rarr;</button>
+      {% endif %}
+    </nav>
+    {% endif %}
+
+    {% else %}
+    <!-- No results -->
+    <div class="no-results-card glass-card reveal" role="alert">
+      <div class="no-results-icon">No Results Found</div>
+      <h3>No Street Food Found</h3>
+      <p>No items in <strong>{{ city }}</strong> under Rs {{ budget }}.<br/>
+         Try a higher budget or a different city.</p>
+      <a href="/" class="link-btn" style="margin-top:24px;display:inline-flex">
+        &larr; Try Again
+      </a>
+    </div>
+    {% endif %}
+
+  </div>
+</section>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Navbar scroll
+window.addEventListener('scroll', () => {
+  const nb = document.getElementById('navbar');
+  if (nb) nb.classList.toggle('scrolled', window.scrollY > 60);
+}, { passive: true });
+</script>
+{% endblock %}

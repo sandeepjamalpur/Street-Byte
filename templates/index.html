@@ -1,0 +1,187 @@
+{% extends "base.html" %}
+{% set active_page = "home" %}
+
+{% block title %}Home{% endblock %}
+{% block meta_desc %}Find the best Indian street food and vendors by city and budget using AI-powered recommendations.{% endblock %}
+
+{% block content %}
+
+  <!-- HERO -->
+  <section class="hero" id="hero" aria-label="Hero section">
+    <div class="hero-bg-circles" aria-hidden="true">
+      <div class="circle c1"></div>
+      <div class="circle c2"></div>
+      <div class="circle c3"></div>
+    </div>
+
+    <div class="hero-content">
+      <div class="hero-badge">
+        <span class="hero-badge-dot" aria-hidden="true"></span>
+        AI-Powered Recommendations
+      </div>
+      <h1 class="hero-title">
+        Discover India's<br/>
+        Best <span class="gradient-text" id="typewriter-word">Street Food</span>
+      </h1>
+      <p class="hero-subtitle">
+        Powered by VADER NLP sentiment analysis and machine learning across 10 cities.
+        Find the most loved street food and vendors filtered to your budget.
+      </p>
+      <div class="hero-cta-row">
+        <a href="#search-section" class="hero-cta" id="cta-find">
+          Find Food Now
+        </a>
+        <a href="/about" class="hero-cta-ghost">
+          How It Works
+        </a>
+      </div>
+    </div>
+
+    <!-- Floating food chips -->
+    <div class="floating-chips" aria-hidden="true">
+      <span class="chip" style="--d:0s;  --x:-260px;--y:-90px">Shawarma</span>
+      <span class="chip" style="--d:0.5s;--x:200px; --y:-100px">Biryani</span>
+      <span class="chip" style="--d:1s;  --x:-200px;--y:80px">Pani Puri</span>
+      <span class="chip" style="--d:1.5s;--x:240px; --y:70px">Irani Chai</span>
+      <span class="chip" style="--d:2s;  --x:-100px;--y:160px">Dosa</span>
+      <span class="chip" style="--d:2.5s;--x:300px; --y:20px">Kebab</span>
+      <span class="chip" style="--d:3s;  --x:-350px;--y:10px">Vada Pav</span>
+      <span class="chip" style="--d:3.5s;--x:160px; --y:-180px">Chole Bhature</span>
+    </div>
+
+    <!-- Scroll hint -->
+    <div class="scroll-hint" aria-hidden="true">
+      <span>Scroll</span>
+      <div class="scroll-arrow"></div>
+    </div>
+  </section>
+
+  <!-- STATS BAR -->
+  <section class="stats-bar" aria-label="Statistics">
+    <div class="container">
+      <div class="stats-bar-inner">
+        <div class="stat-bar-item reveal">
+          <div class="stat-bar-num" data-count="10" data-suffix="+">10+</div>
+          <div class="stat-bar-label">Indian Cities</div>
+        </div>
+        <div class="stat-divider" aria-hidden="true"></div>
+        <div class="stat-bar-item reveal delay-1">
+          <div class="stat-bar-num" data-count="50" data-suffix="+">50+</div>
+          <div class="stat-bar-label">Food Items</div>
+        </div>
+        <div class="stat-divider" aria-hidden="true"></div>
+        <div class="stat-bar-item reveal delay-2">
+          <div class="stat-bar-num" data-count="130" data-suffix="+">130+</div>
+          <div class="stat-bar-label">Vendors Ranked</div>
+        </div>
+        <div class="stat-divider" aria-hidden="true"></div>
+        <div class="stat-bar-item reveal delay-3">
+          <div class="stat-bar-num" data-count="300" data-suffix="+">300+</div>
+          <div class="stat-bar-label">Dataset Entries</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SEARCH -->
+  <section class="search-section" id="search-section" aria-label="Search for food">
+    <div class="container">
+      <div class="search-card glass-card reveal">
+        <div class="search-header">
+          <div class="section-label">Get Started</div>
+          <h2>Find Your Perfect Street Food</h2>
+          <p>Select your city and budget to get AI-ranked recommendations</p>
+        </div>
+
+        <form action="/results" method="GET" class="search-form" id="search-form">
+          <div class="form-group">
+            <label for="city-select">City</label>
+            <div class="select-wrapper">
+              <select id="city-select" name="city" required>
+                <option value="" disabled selected>Select a city...</option>
+                {% for city in cities %}
+                  <option value="{{ city }}">{{ city }}</option>
+                {% endfor %}
+              </select>
+              <span class="select-arrow" aria-hidden="true">&#9660;</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="budget-slider">
+              Budget &nbsp;<span class="budget-display" id="budget-display">Rs 150</span>
+            </label>
+            <input type="range" id="budget-slider" name="budget"
+                   min="20" max="500" value="150" step="10"
+                   aria-label="Budget range" />
+            <div class="slider-labels" aria-hidden="true">
+              <span>Rs 20</span>
+              <span>Rs 500</span>
+            </div>
+          </div>
+
+          <button type="submit" class="btn-search" id="search-btn">
+            Recommend Food
+          </button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- QUICK CITIES PREVIEW -->
+  <section class="cities-section" aria-label="Available cities">
+    <div class="container">
+      <div class="section-label reveal">Available Cities</div>
+      <h2 class="section-title reveal delay-1">Search Across 10 Indian Cities</h2>
+      <div class="cities-row" id="cities-row">
+        {% for city in cities %}
+          <a href="/results?city={{ city }}&budget=200" class="city-pill reveal delay-{{ loop.index }}">{{ city }}</a>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS PREVIEW -->
+  <section class="how-preview" aria-label="How it works">
+    <div class="container">
+      <div class="section-label reveal">How It Works</div>
+      <h2 class="section-title reveal delay-1">Smart Recommendations in 3 Steps</h2>
+      <div class="preview-steps" style="margin-top:40px">
+        <div class="preview-step glass-card reveal delay-1">
+          <div class="step-num">01</div>
+          <h3>Choose City and Budget</h3>
+          <p>Select your city and the maximum price you want to spend on a street food item.</p>
+        </div>
+        <div class="preview-step glass-card reveal delay-2">
+          <div class="step-num">02</div>
+          <h3>AI Analyses the Data</h3>
+          <p>VADER NLP scores every review and our weighted algorithm ranks each vendor by quality.</p>
+        </div>
+        <div class="preview-step glass-card reveal delay-3">
+          <div class="step-num">03</div>
+          <h3>Get Top Results</h3>
+          <p>Browse paginated, ranked food items and discover your next favourite meal.</p>
+        </div>
+      </div>
+      <div style="text-align:center;margin-top:36px" class="reveal">
+        <a href="/about" class="link-btn">Learn More About the System &rarr;</a>
+      </div>
+    </div>
+  </section>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Navbar scroll on home page
+window.addEventListener('scroll', () => {
+  const nb = document.getElementById('navbar');
+  if (nb) nb.classList.toggle('scrolled', window.scrollY > 60);
+}, { passive: true });
+
+// Limit city pill delay classes to avoid too much stagger
+document.querySelectorAll('.city-pill').forEach((pill, i) => {
+  pill.style.transitionDelay = (i * 0.05) + 's';
+});
+</script>
+{% endblock %}

@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% set active_page = "cities" %}
+
+{% block title %}All Cities{% endblock %}
+{% block meta_desc %}Browse street food recommendations across 10 Indian cities on StreetByte.{% endblock %}
+
+{% block content %}
+
+  <!-- PAGE HERO -->
+  <section class="page-hero" aria-label="Cities hero">
+    <div class="container">
+      <div class="section-label reveal">Coverage</div>
+      <h1 class="page-hero-title reveal delay-1">
+        10 Cities, <span class="gradient-text">Endless Flavours</span>
+      </h1>
+      <p class="page-hero-sub reveal delay-2">
+        Click any city to see its best street food recommendations ranked by AI score.
+      </p>
+    </div>
+    <div class="hero-bg-circles" aria-hidden="true">
+      <div class="circle c1"></div>
+      <div class="circle c3"></div>
+    </div>
+  </section>
+
+  <!-- CITIES GRID -->
+  <section class="cities-full-section" aria-label="All cities">
+    <div class="container">
+      <div class="cities-big-grid">
+        {% for city in cities %}
+        <div class="city-card glass-card reveal" style="transition-delay: {{ loop.index0 * 0.07 }}s">
+          <div class="city-card-name">{{ city }}</div>
+          <div class="city-card-tag">Street Food Capital</div>
+          <div class="city-card-links">
+            <a href="/results?city={{ city }}&budget=100" class="city-budget-link">
+              <span>Under Rs 100</span>
+            </a>
+            <a href="/results?city={{ city }}&budget=200" class="city-budget-link">
+              <span>Under Rs 200</span>
+            </a>
+            <a href="/results?city={{ city }}&budget=500" class="city-budget-link">
+              <span>All Budgets</span>
+            </a>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+window.addEventListener('scroll', () => {
+  const nb = document.getElementById('navbar');
+  if (nb) nb.classList.toggle('scrolled', window.scrollY > 60);
+}, { passive: true });
+</script>
+{% endblock %}

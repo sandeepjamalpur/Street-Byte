@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+  <link rel="icon" type="image/png" href="/static/img/logo.png?v=3" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}StreetByte{% endblock %} - AI Street Food Recommender</title>
+  <meta name="description" content="{% block meta_desc %}Discover the best Indian street food and vendors with AI-powered recommendations.{% endblock %}" />
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/static/css/style.css" />
+  {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+  <!-- Page Loader -->
+  <div id="page-loader" aria-hidden="true">
+    <div class="loader-ring"></div>
+  </div>
+
+  <!-- Cursor Glow -->
+  <div class="cursor-glow" aria-hidden="true"></div>
+
+  <!-- Navbar -->
+  <nav class="navbar" id="navbar" role="navigation" aria-label="Main navigation">
+    <a href="/" class="brand" aria-label="StreetByte home">
+      <img src="/static/img/logo.png?v=3" alt="StreetByte chili logo" class="brand-logo"
+           onerror="this.style.display='none'" />
+      <span>Street<span class="accent">Byte</span></span>
+    </a>
+    <ul class="nav-links" id="nav-links" role="list">
+      <li><a href="/" class="{% if active_page == 'home' %}nav-active{% endif %}">Home</a></li>
+      <li><a href="/about" class="{% if active_page == 'about' %}nav-active{% endif %}">How It Works</a></li>
+      <li><a href="/cities-page" class="{% if active_page == 'cities' %}nav-active{% endif %}">Cities</a></li>
+    </ul>
+    <button class="nav-toggle" id="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  {% block content %}{% endblock %}
+
+  <footer class="footer" role="contentinfo">
+    <div class="container">
+      <div class="footer-brand">
+        <img src="/static/img/logo.png?v=3" alt="StreetByte chili logo" class="brand-logo" />
+        <span>Street<span class="accent">Byte</span></span>
+      </div>
+      <p class="footer-tagline">AI-powered street food discovery across India</p>
+      <nav class="footer-nav" aria-label="Footer navigation">
+        <a href="/">Home</a>
+        <a href="/about">How It Works</a>
+        <a href="/cities-page">Cities</a>
+      </nav>
+      <p class="footer-copy">Built with Flask, VADER NLP, Python</p>
+    </div>
+  </footer>
+
+  <script src="/static/js/main.js"></script>
+  {% block extra_js %}{% endblock %}
+</body>
+</html>

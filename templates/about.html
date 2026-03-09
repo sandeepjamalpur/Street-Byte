@@ -1,0 +1,349 @@
+{% extends "base.html" %}
+{% set active_page = "about" %}
+
+{% block title %}How It Works{% endblock %}
+{% block meta_desc %}Learn how StreetByte uses customer reviews and machine learning to rank Indian street food vendors.{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" />
+<style>
+  /* ── How-It-Works Steps ── */
+  .how-steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 24px; margin-top: 44px; }
+  .how-step {
+    padding: 36px 28px; border-radius: var(--r-xl);
+    background: var(--bg-card); border: 1px solid var(--border);
+    backdrop-filter: blur(20px); position: relative; overflow: hidden;
+    transition: transform 0.3s var(--ease-bounce), border-color var(--transition), box-shadow var(--transition);
+  }
+  .how-step:hover { transform: translateY(-8px); border-color: var(--border-hover); box-shadow: var(--shadow-glow); }
+  .how-step::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--accent-2));
+    opacity: 0; transition: opacity var(--transition);
+  }
+  .how-step:hover::before { opacity: 1; }
+  .how-step-icon {
+    width: 56px; height: 56px; border-radius: 16px;
+    background: rgba(255,107,53,0.1); border: 1px solid rgba(255,107,53,0.2);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.6rem; margin-bottom: 20px;
+  }
+  .how-step-num {
+    position: absolute; top: 20px; right: 22px;
+    font-family: var(--font-display); font-size: 3.5rem; font-weight: 900;
+    color: rgba(255,255,255,0.04); line-height: 1; pointer-events: none;
+  }
+  .how-step h3 { font-family: var(--font-display); font-size: 1.1rem; font-weight: 700; margin-bottom: 10px; color: var(--text); }
+  .how-step p  { font-size: 0.9rem; color: var(--text-muted); line-height: 1.7; }
+
+  /* ── Formula Card ── */
+  .formula-visual {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center;
+    margin-top: 48px;
+  }
+  @media (max-width: 900px) { .formula-visual { grid-template-columns: 1fr; gap: 32px; } }
+
+  .formula-box-big {
+    padding: 32px; border-radius: var(--r-xl);
+    background: var(--bg-card); border: 1px solid var(--border);
+    backdrop-filter: blur(20px); position: relative; overflow: hidden;
+  }
+  .formula-box-big::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--accent-2), var(--accent-4));
+  }
+  .formula-eq {
+    font-family: var(--font-display); font-size: 1.05rem; font-weight: 700;
+    color: var(--accent); background: rgba(255,107,53,0.06);
+    border: 1px solid rgba(255,107,53,0.15); border-radius: var(--r-md);
+    padding: 16px 20px; margin-bottom: 18px; line-height: 1.6;
+  }
+  .formula-note { font-size: 0.85rem; color: var(--text-muted); line-height: 1.7; }
+
+  .weight-bars { display: flex; flex-direction: column; gap: 20px; }
+  .weight-row { display: flex; align-items: center; gap: 16px; }
+  .weight-label { font-size: 0.85rem; color: var(--text-muted); min-width: 90px; font-weight: 500; }
+  .weight-bar-track { flex: 1; height: 10px; background: rgba(255,255,255,0.06); border-radius: 99px; overflow: hidden; }
+  .weight-bar-fill  { height: 100%; border-radius: 99px; animation: bar-grow 1.4s cubic-bezier(0.4,0,0.2,1) both; }
+  .weight-pct { font-size: 0.85rem; font-weight: 700; color: var(--text); min-width: 36px; text-align: right; }
+
+  .formula-stats { display: flex; gap: 36px; margin-top: 36px; flex-wrap: wrap; }
+  .fstat { display: flex; flex-direction: column; gap: 4px; }
+  .fstat-num {
+    font-family: var(--font-display); font-size: 2.2rem; font-weight: 800;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .fstat-label { font-size: 0.82rem; color: var(--text-muted); }
+
+  /* ── Tech Stack Logos ── */
+  .tech-logo-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 20px;
+    margin-top: 44px;
+  }
+  .tech-logo-card {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 14px; padding: 32px 20px;
+    background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--r-xl);
+    backdrop-filter: blur(20px); text-align: center;
+    transition: transform 0.3s var(--ease-bounce), border-color var(--transition), box-shadow var(--transition);
+    position: relative; overflow: hidden;
+  }
+  .tech-logo-card::after {
+    content: '';
+    position: absolute; inset: 0; border-radius: var(--r-xl);
+    background: radial-gradient(circle at 50% 110%, rgba(255,107,53,0.08), transparent 70%);
+    opacity: 0; transition: opacity var(--transition);
+  }
+  .tech-logo-card:hover { transform: translateY(-8px) scale(1.04); border-color: var(--border-hover); box-shadow: var(--shadow-glow); }
+  .tech-logo-card:hover::after { opacity: 1; }
+  .tech-logo-card i { font-size: 3.2rem; color: var(--accent); transition: transform 0.3s var(--ease-bounce); }
+  .tech-logo-card:hover i { transform: scale(1.15) rotate(-5deg); }
+  .tech-logo-name { font-family: var(--font-display); font-size: 0.95rem; font-weight: 700; color: var(--text); }
+  .tech-logo-role { font-size: 0.75rem; color: var(--text-dim); margin-top: 2px; }
+
+  /* custom colors per tech */
+  .tech-python  i { color: #3B82F6; }
+  .tech-flask   i { color: #E0E0E0; }
+  .tech-pandas  i { color: #7C3AED; }
+  .tech-vader   i { color: #10B981; }
+  .tech-html    i { color: #F97316; }
+  .tech-css     i { color: #3B82F6; }
+
+  .tech-badge {
+    display: flex; align-items: center; justify-content: center;
+    width: 52px; height: 52px; border-radius: 14px;
+    font-size: 1.6rem; font-weight: 800;
+    background: rgba(255,107,53,0.12); color: var(--accent);
+    font-family: var(--font-display);
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+
+  <!-- ABOUT HERO -->
+  <section class="page-hero" aria-label="About hero">
+    <div class="container">
+      <div class="section-label reveal">About StreetByte</div>
+      <h1 class="page-hero-title reveal delay-1">
+        How the <span class="gradient-text">AI System</span> Works
+      </h1>
+      <p class="page-hero-sub reveal delay-2">
+        We read thousands of real customer reviews so you don't have to&nbsp;&mdash; 
+        and surface only the best street food in your city.
+      </p>
+    </div>
+    <div class="hero-bg-circles" aria-hidden="true">
+      <div class="circle c1"></div>
+      <div class="circle c2"></div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS STEPS -->
+  <section class="how-section" id="how-it-works" aria-label="How it works steps">
+    <div class="container">
+      <div class="section-label reveal">The Simple Process</div>
+      <h2 class="section-title reveal delay-1">4 Easy Steps to Your Next Favourite Meal</h2>
+
+      <div class="how-steps">
+
+        <div class="how-step reveal delay-1">
+          <div class="how-step-num">01</div>
+          <div class="how-step-icon">📍</div>
+          <h3>You Pick a City &amp; Budget</h3>
+          <p>Simply choose which Indian city you're in and how much you want to spend. That's all we need to get started.</p>
+        </div>
+
+        <div class="how-step reveal delay-2">
+          <div class="how-step-num">02</div>
+          <div class="how-step-icon">💬</div>
+          <h3>We Read Every Customer Review</h3>
+          <p>Our AI reads hundreds of real customer reviews for every vendor and figures out whether people genuinely loved or disliked the food &mdash; like having a friend who's eaten everywhere.</p>
+        </div>
+
+        <div class="how-step reveal delay-3">
+          <div class="how-step-num">03</div>
+          <div class="how-step-icon">🏆</div>
+          <h3>AI Ranks the Best Options</h3>
+          <p>We combine star ratings, review positivity, and how popular a vendor is to compute a single AI score out of 100 for every dish. Higher score = better pick.</p>
+        </div>
+
+        <div class="how-step reveal delay-4">
+          <div class="how-step-num">04</div>
+          <div class="how-step-icon">🍽️</div>
+          <h3>You Get the Top Results</h3>
+          <p>Results are sorted from best to worst and split into easy-to-browse pages. Pick something that looks good and go eat!</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- SCORE FORMULA -->
+  <section class="formula-section" aria-label="Score formula">
+    <div class="container">
+      <div class="section-label reveal">Behind the Score</div>
+      <h2 class="section-title reveal delay-1">How Each Dish Gets Its Score</h2>
+
+      <div class="formula-visual">
+        <!-- Left: text explanation -->
+        <div class="reveal-left">
+          <p style="color:var(--text-muted);line-height:1.85;margin-bottom:16px;font-size:0.98rem">
+            Every dish in our database gets an <strong style="color:var(--text)">AI Score out of 100</strong>. 
+            The score is built from three things we know customers actually care about.
+          </p>
+          <p style="color:var(--text-muted);line-height:1.85;margin-bottom:24px;font-size:0.98rem">
+            A place with slightly fewer stars but thousands of glowing reviews will still 
+            rank higher than a place with 5 stars and just 3 reviews. The score is designed 
+            to reflect <em>real crowd opinion</em>, not just a number.
+          </p>
+
+          <div class="formula-eq">
+            Score = (0.40 &times; Star Rating) + (0.40 &times; Review Positivity) + (0.20 &times; Number of Reviews)
+          </div>
+          <p class="formula-note">All three values are scaled to 0&ndash;100 before combining, so they're fairly compared.</p>
+
+          <div class="formula-stats">
+            <div class="fstat">
+              <span class="fstat-num" data-count="10">10</span>
+              <span class="fstat-label">Cities</span>
+            </div>
+            <div class="fstat">
+              <span class="fstat-num" data-count="50" data-suffix="+">50+</span>
+              <span class="fstat-label">Food Items</span>
+            </div>
+            <div class="fstat">
+              <span class="fstat-num" data-count="130" data-suffix="+">130+</span>
+              <span class="fstat-label">Vendors Ranked</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: weight bars -->
+        <div class="formula-box-big reveal-right delay-2">
+          <h4 style="font-family:var(--font-display);font-size:1.05rem;font-weight:700;margin-bottom:28px">
+            What Makes Up the Score?
+          </h4>
+          <div class="weight-bars">
+            <div class="weight-row">
+              <span class="weight-label">⭐ Star Rating</span>
+              <div class="weight-bar-track">
+                <div class="weight-bar-fill" style="width:40%;background:#FF6B35"></div>
+              </div>
+              <span class="weight-pct">40%</span>
+            </div>
+            <div class="weight-row">
+              <span class="weight-label">💬 Reviews</span>
+              <div class="weight-bar-track">
+                <div class="weight-bar-fill" style="width:40%;background:#FFD166"></div>
+              </div>
+              <span class="weight-pct">40%</span>
+            </div>
+            <div class="weight-row">
+              <span class="weight-label">📊 Popularity</span>
+              <div class="weight-bar-track">
+                <div class="weight-bar-fill" style="width:20%;background:#06D6A0"></div>
+              </div>
+              <span class="weight-pct">20%</span>
+            </div>
+          </div>
+
+          <div style="margin-top:32px;display:flex;flex-direction:column;gap:12px">
+            <div style="display:flex;align-items:flex-start;gap:10px;font-size:0.84rem;color:var(--text-muted)">
+              <span style="color:#06D6A0;font-size:1rem">✓</span>
+              <span><strong style="color:var(--text)">Loved reviews</strong> push a dish higher — AI reads the words, not just the stars.</span>
+            </div>
+            <div style="display:flex;align-items:flex-start;gap:10px;font-size:0.84rem;color:var(--text-muted)">
+              <span style="color:#FFD166;font-size:1rem">✓</span>
+              <span><strong style="color:var(--text)">More reviews = more trust</strong> — a vendor with 2,000 happy customers beats one with just 5.</span>
+            </div>
+            <div style="display:flex;align-items:flex-start;gap:10px;font-size:0.84rem;color:var(--text-muted)">
+              <span style="color:#FF6B35;font-size:1rem">✓</span>
+              <span><strong style="color:var(--text)">Star ratings</strong> still matter — quality and taste always count.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TECHNOLOGY STACK WITH LOGOS -->
+  <section class="tech-section" aria-label="Technology stack">
+    <div class="container">
+      <div class="section-label reveal">Technology Stack</div>
+      <h2 class="section-title reveal delay-1">Built With</h2>
+
+      <div class="tech-logo-grid">
+
+        <div class="tech-logo-card tech-python reveal delay-1">
+          <i class="devicon-python-plain"></i>
+          <div>
+            <div class="tech-logo-name">Python</div>
+            <div class="tech-logo-role">Backend &amp; ML</div>
+          </div>
+        </div>
+
+        <div class="tech-logo-card tech-flask reveal delay-2">
+          <i class="devicon-flask-original"></i>
+          <div>
+            <div class="tech-logo-name">Flask</div>
+            <div class="tech-logo-role">Web Framework</div>
+          </div>
+        </div>
+
+        <div class="tech-logo-card tech-pandas reveal delay-3">
+          <i class="devicon-pandas-plain"></i>
+          <div>
+            <div class="tech-logo-name">Pandas</div>
+            <div class="tech-logo-role">Data Processing</div>
+          </div>
+        </div>
+
+        <div class="tech-logo-card tech-vader reveal delay-4">
+          <!-- VADER NLP has no devicon, use a styled badge -->
+          <div class="tech-badge">NLP</div>
+          <div>
+            <div class="tech-logo-name">VADER NLP</div>
+            <div class="tech-logo-role">Review Analysis</div>
+          </div>
+        </div>
+
+        <div class="tech-logo-card tech-html reveal delay-5">
+          <i class="devicon-html5-plain"></i>
+          <div>
+            <div class="tech-logo-name">HTML 5</div>
+            <div class="tech-logo-role">Frontend Structure</div>
+          </div>
+        </div>
+
+        <div class="tech-logo-card tech-css reveal delay-6">
+          <i class="devicon-css3-plain"></i>
+          <div>
+            <div class="tech-logo-name">CSS 3</div>
+            <div class="tech-logo-role">Styling &amp; Animations</div>
+          </div>
+        </div>
+
+      </div>
+
+      <div style="text-align:center;margin-top:56px" class="reveal">
+        <a href="/" class="hero-cta">Try StreetByte Now</a>
+      </div>
+    </div>
+  </section>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+window.addEventListener('scroll', () => {
+  const nb = document.getElementById('navbar');
+  if (nb) nb.classList.toggle('scrolled', window.scrollY > 60);
+}, { passive: true });
+</script>
+{% endblock %}
